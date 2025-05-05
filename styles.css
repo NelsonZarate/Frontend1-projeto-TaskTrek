@@ -1,0 +1,195 @@
+.navbar {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+main{
+
+}
+
+.time {
+    font-size: 25px;
+    color: #000000;
+    align-self: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.time:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+.navbar-title {
+    font-size: 25px;
+    color: #000000;
+    align-self: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.navbar-title:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.todo-section {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+#todo-form sl-button,
+#todo-form label {
+  padding: 20px 0px 20px 0px;
+}
+
+.task-list {
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item{
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+/* Task list container */
+.task-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 tasks per row */
+    gap: 20px; /* Space between tasks */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    padding: 20px;
+    scroll-snap-type: x mandatory; /* Smooth snapping for scrolling */
+}
+
+/* Individual task item */
+.task-item {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow for tasks */
+    scroll-snap-align: start; /* Snap each task into view */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Add hover effect for tasks */
+.task-item:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); /* Slight lift effect */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Arrows for navigation */
+.task-list-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.task-list-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.task-list-arrow.left {
+    left: -20px;
+}
+
+.task-list-arrow.right {
+    right: -20px;
+}
+
+.task-list-arrow:hover {
+    background-color: #0056b3;
+}
+
+/* check box style */
+.checkbox-wrapper-36 *,
+.checkbox-wrapper-36 *::before,
+.checkbox-wrapper-36 *::after {
+  box-sizing: border-box;
+}
+
+.checkbox-wrapper-36 label {
+  background: rgb(237, 234, 234);
+  border-radius: 12px;
+  box-shadow: 0px 50px 20px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  height: 50px;
+  padding: 8px;
+  position: relative;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+  width: 116px;
+}
+
+.checkbox-wrapper-36 input {
+  display: none;
+}
+
+.checkbox-wrapper-36 label:after {
+  animation: move-left-36 400ms;
+  background: #E2E2E2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27' height='27' viewBox='0 0 24 24'%3E%3Cpath stroke='#E2E2E2' fill='#E2E2E2' stroke-linecap='round' d='M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z'/%3E%3C/svg%3E") no-repeat center;
+  border-radius: 12px;
+  content: '';
+  left: 8px;
+  outline: none;
+  position: absolute;
+  transition: background 100ms linear;
+  width: 36px;
+  height: 36px;
+  left: 8px;
+  top: 7px;
+}
+
+.checkbox-wrapper-36 label:active {
+  box-shadow: 0px 10px 20px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1.15);
+}
+
+.checkbox-wrapper-36 input:checked + label:after {
+  animation: move-right-36 400ms;
+  background: #6EB54E url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27' height='27' viewBox='0 0 24 24'%3E%3Cpath stroke='white' fill='white' stroke-linecap='round' d='M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z'/%3E%3C/svg%3E") no-repeat center;
+  left: 72px;
+}
+
+@keyframes move-right-36 {
+  0% {
+    left: 8px;
+  }
+  75% {
+    left: 78px;
+  }
+  100% {
+    left: 72px;
+  }
+}
+
+@keyframes move-left-36 {
+  0% {
+    left: 72px;
+  }
+  75% {
+    left: 2px;
+  }
+  100% {
+    left: 8px;
+  }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskTrek - Todo App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.4.0/dist/themes/light.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.4.0/dist/shoelace.js"></script>
+</head>
+<body>
+  <header>
+    <nav class ="navbar" aria-label="Main Navigation">
+      <h1 class="navbar-title">TaskTrek</h1>
+      <a class="time" id="time">20:00</a>
+    </nav>
+  </header>
+  <main>
+
+        <div class="todo-form">
+            <h2 id="todo-section-title">Todo List</h2>
+            <form id="todo-form" aria-label="Add a new task">
+                <label for="todo-input" class="visually-hidden">New Task</label>
+                <sl-input id="todo-input" placeholder="Add a new task..." clearable></sl-input>
+                <label for="todo-description" class="visually-hidden">Task Description</label>
+                <sl-textarea id="todo-description" placeholder="Task Description" rows="3" clearable></sl-textarea>
+                <sl-button type="submit" variant="primary">Add Task</sl-button>
+            </form>
+        </div>
+        <div class="task-list" id="task-list" aria-live="polite">
+            <!-- Todo items will be dynamically rendered here -->
+        </div>
+        <div class="todo-items-completed">
+            <h2 id="completed-section-title" class="visually-hidden">Completed Tasks</h2>
+            <sl-button id="clear-completed" variant="danger" size="small">Clear Completed</sl-button>
+            <div id="completed-list" aria-live="polite">
+                <!-- Completed items will be dynamically rendered here -->
+            </div>
+
+        </div>
+
+  </main>
+  <footer>
+    <p>&copy; 2025 TaskTrek. All rights reserved.</p>
+  </footer>
+  <script src="app.js" type="module"></script>
+  <script src="src.js" type="module"></script>
+  <script src="tasks.js" type="module"></script>
+</body>
+</html>
