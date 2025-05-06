@@ -127,17 +127,20 @@ main{
 .checkbox-wrapper-36 *::after {
   box-sizing: border-box;
 }
-
+.checkbox-wrapper-36 {
+  margin-left: auto;
+}
 .checkbox-wrapper-36 label {
   background: rgb(237, 234, 234);
   border-radius: 12px;
-  box-shadow: 0px 50px 20px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.1);
   display: flex;
-  height: 50px;
-  padding: 8px;
   position: relative;
   transition: transform 300ms ease, box-shadow 300ms ease;
-  width: 116px;
+  padding: 4px; 
+  width: 80px; 
+  height: 30px;
+  justify-content: space-between;
 }
 
 .checkbox-wrapper-36 input {
@@ -146,17 +149,16 @@ main{
 
 .checkbox-wrapper-36 label:after {
   animation: move-left-36 400ms;
-  background: #E2E2E2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27' height='27' viewBox='0 0 24 24'%3E%3Cpath stroke='#E2E2E2' fill='#E2E2E2' stroke-linecap='round' d='M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z'/%3E%3C/svg%3E") no-repeat center;
+  background: #c30000;
   border-radius: 12px;
   content: '';
-  left: 8px;
   outline: none;
   position: absolute;
   transition: background 100ms linear;
-  width: 36px;
-  height: 36px;
-  left: 8px;
-  top: 7px;
+  width: 20px;
+  height: 20px;
+  left: 4px;
+  top: 4px; 
 }
 
 .checkbox-wrapper-36 label:active {
@@ -167,7 +169,7 @@ main{
 .checkbox-wrapper-36 input:checked + label:after {
   animation: move-right-36 400ms;
   background: #6EB54E url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27' height='27' viewBox='0 0 24 24'%3E%3Cpath stroke='white' fill='white' stroke-linecap='round' d='M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z'/%3E%3C/svg%3E") no-repeat center;
-  left: 72px;
+  left: 50px;
 }
 
 @keyframes move-right-36 {
@@ -175,21 +177,56 @@ main{
     left: 8px;
   }
   75% {
-    left: 78px;
+    left: 55px;
   }
   100% {
-    left: 72px;
+    left: 55x;
   }
 }
 
 @keyframes move-left-36 {
   0% {
-    left: 72px;
+    left: 50px;
   }
   75% {
     left: 2px;
   }
   100% {
-    left: 8px;
+    left: 4px;
   }
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background-color: #f8f9fa; /* cor suave de fundo */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: 20px 0;
+  max-width: 300px;
+}
+
+.filter-container label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+#filter-select {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+#filter-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+  outline: none;
 }

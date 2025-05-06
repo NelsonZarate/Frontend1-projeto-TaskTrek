@@ -1,44 +1,33 @@
 # Frontend1-projeto-TaskTrek
 
-A simple Todo List web application built with HTML, CSS, and vanilla JavaScript.
+### **Titulo do website:** Todoodledo
 
-## Features
+<br>
 
-- Create new todo items
-- Mark todos as completed
-- Edit existing todos
-- Delete todos
-- Data persistence using localStorage
-- Modern UI using Shoelace component library
+### **Descrição do website:** Website de To-do List
 
-## Technologies Used
+<br>
 
-- HTML5
-- CSS3
-- Vanilla JavaScript (ES6+)
-- [Shoelace](https://shoelace.style/) - A UI component library
-- LocalStorage API for data persistence
+### **Repositorio:** /frontend1-project-todoodledoo
 
-## Getting Started
+<br>
 
-1. Clone this repository
-2. Open `index.html` in your web browser
-3. Start managing your tasks!
+# Requisitos
 
-## Project Structure
+1. Create, Read, Update and Delete operations (Create todo item, read all todo items, update single todo item, Delete single todo item).
+2. Use mock api.
+3. Use at least one native javascript API (Geolocation, DateTime, etc).
+4. Form to create and edit todo items, with validation.
+5. Use at least one external library (An ui component library for example).
+6. Responsive
+7. Generate lighthouse report with all 4 metrics on the green.
+8. Online on github pages.
 
-- `index.html` - The main HTML structure
-- `styles.css` - CSS styles for the application
-- `app.js` - JavaScript logic for CRUD operations and localStorage handling
+## Bonus
 
-## For Students
+- Implement 1 web component.
+- Also use local storage.
+- Configure PWA.
+- Use canvas in some way.
 
-This project demonstrates:
-
-- DOM manipulation
-- Event handling
-- LocalStorage for data persistence
-- UI component libraries integration
-- CRUD operations implementation
-- JavaScript array methods (map, filter, find)
-- Modern ES6+ JavaScript features
+- Apresentar projeto no portfolio desenvolvido em Web Pages
