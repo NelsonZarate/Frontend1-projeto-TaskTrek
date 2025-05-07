@@ -1,8 +1,11 @@
+import { updateTask } from "./app.js";
+import {displayAllTasks, displayAllLocalTasks} from "./tasks.js";
+
 // Seleciona a modal e os elementos do formulário
 const editTaskModal = document.getElementById("edit-task-modal");
-const editTaskForm = document.getElementById("edit-task-form");
 const editTaskName = document.getElementById("edit-task-name");
 const editTaskDescription = document.getElementById("edit-task-description");
+const editTaskForm = document.getElementById("edit-task-form");
 
 let currentTaskId = null; // Armazena o ID da tarefa sendo editada
 
@@ -13,8 +16,6 @@ export function openEditModal(task) {
   editTaskDescription.value = task.description; // Preenche a descrição da tarefa
   editTaskModal.show(); // Abre a modal
 }
-
-// Evento para salvar as alterações
 editTaskForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -24,17 +25,26 @@ editTaskForm.addEventListener("submit", (event) => {
     description: editTaskDescription.value,
   };
 
-  // Atualiza a tarefa (você pode substituir isso por uma chamada à API ou lógica existente)
   updateTask(updatedTask.id, updatedTask)
     .then(() => {
       console.log(`Task ${updatedTask.id} updated successfully.`);
-      displayAllTasks(); // Atualiza a lista de tarefas
-      editTaskModal.hide(); // Fecha a modal
+      displayAllTasks(); // Atualiza usando API
+      editTaskModal.hide();
     })
-    .catch((error) => console.error("Error updating task:", error));
+    .catch((error) => {
+      console.error("Error updating task via API:", error);
+
+      const localTasks = loadTasks();
+      const updatedLocalTasks = localTasks.map((task) =>
+        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+      );
+
+      saveTasks(updatedLocalTasks);
+      displayAllLocalTasks(updatedLocalTasks);
+      editTaskModal.hide();
+    });
 });
 
-// Evento para fechar a modal ao clicar no botão "Cancel"
 document.querySelector(".close-modal-btn").addEventListener("click", () => {
   editTaskModal.hide();
 });

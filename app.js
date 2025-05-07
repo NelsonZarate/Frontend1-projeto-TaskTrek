@@ -1,6 +1,6 @@
 export const getTasks = async function fetchTasks() {
     try {
-        const apiUrl = "https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks"; // Correct URL
+        const apiUrl = "https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks"; 
         const response = await fetch(apiUrl);
         if (!response.ok) {
             throw new Error(`Failed to fetch posts: ${response.statusText}`);
@@ -14,7 +14,7 @@ export const getTasks = async function fetchTasks() {
 
 export const getTask = async function fetchTask(id) {
     try {
-        const apiUrl = `https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks/${id}`; // Correct URL
+        const apiUrl = `https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks/${id}`;
         const response = await fetch(apiUrl);
         if (!response.ok) {
             throw new Error(`Failed to fetch post: ${response.statusText}`);
@@ -29,7 +29,7 @@ export const getTask = async function fetchTask(id) {
 export const createTask = async function createNewTask(task) {
     try {
         console.log("Creating task:", task);
-        const apiUrl = "https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks"; // Correct URL
+        const apiUrl = "https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks";
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -49,7 +49,7 @@ export const createTask = async function createNewTask(task) {
 
 export const updateTask = async function updateExistingTasks(id, task) {
     try {
-        const apiUrl = `https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks/${id}`; // Correct URL
+        const apiUrl = `https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks/${id}`;
         const response = await fetch(apiUrl, {
             method: 'PUT',
             headers: {
@@ -69,7 +69,7 @@ export const updateTask = async function updateExistingTasks(id, task) {
 
 export const deleteTask = async function deleteExistingTask(id) {
     try {
-        const apiUrl = `https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks/${id}`; // Correct URL
+        const apiUrl = `https://681901c65a4b07b9d1d1a8e7.mockapi.io/tasks/${id}`; 
         const response = await fetch(apiUrl, {
             method: 'DELETE'
         });
@@ -81,3 +81,4 @@ export const deleteTask = async function deleteExistingTask(id) {
         console.error("Error deleting post:", error);
     }
 };
+

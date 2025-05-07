@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     filterSelect.addEventListener("change", (event) => {
         console.log("Filter changed:", event.target.value);
         const filterValue = event.target.value;
-        if (filterValue === "completed"){
+        if (filterValue === "completed") {
             clear_Button.style.display = "block";
         }
-        else{
+        else {
             clear_Button.style.display = "none";
         }
         displayAllTasks(filterValue); // Pass the selected filter value
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const completedTasks = tasks.filter((task) => task.completed);
                 const updatedTasks = tasks.filter((task) => !task.completed);
                 saveTasks(updatedTasks);
-                displayAllTasks(); 
+                displayAllTasks();
                 document.getElementById("filter-select").value = "all";
-                clear_Button.style.display = "none"; 
+                clear_Button.style.display = "none";
                 console.log("Completed tasks deleted from localStorage.");
             })
             .catch((error) => console.error("Error deleting completed tasks:", error));
@@ -53,6 +53,7 @@ todoForm.addEventListener("submit", (event) => {
     const taskInput = document.getElementById("todo-input");
     const taskText = taskInput.value.trim();
     const TaskDescription = document.getElementById("todo-description");
+    const errorMessage = document.getElementById("error-message");
 
     if (taskText) {
         // Construct the task object
@@ -76,130 +77,143 @@ todoForm.addEventListener("submit", (event) => {
         taskInput.value = ""; // Clear the input field after submission
         TaskDescription.value = ""; // Clear the description field after submission
         displayAllTasks();
-
+        errorMessage.textContent = ""; // Clear any previous error messages
+        errorMessage.style.color = "green";
+        errorMessage.textContent = "Task added successfully!";
+        
     } else {
-        console.log("Task cannot be empty!"); // Log a message if the input is empty
+        errorMessage.textContent = "Please fill in at least the title of the task.";
+        errorMessage.style.color = "red";
+        console.log("Task cannot be empty!");
     }
 });
 
 
-function displayAllTasks(filter = "all") {
+export function displayAllTasks(filter = "all") {
     try {
-        getTasks()
-            .then((tasks) => {
-                console.log("Tasks loaded from server:", tasks);
+        getTasks().then((tasks) => {
+            console.log("Tasks loaded from server:", tasks);
 
-                // Apply the filter
-                const filteredTasks = tasks.filter((task) => {
-                    if (filter === "completed") return task.completed;
-                    if (filter === "active") return !task.completed;
-                    return true; // Show all tasks for "all"
-                });
-
-                const taskList = document.getElementById("task-list");
-                taskList.innerHTML = ""; // Clear the existing tasks
-
-                filteredTasks.forEach((task) => {
-                    const listItem = document.createElement("div");
-                    listItem.className = "task-item";
-
-                    // Create a styled checkbox for task completion
-                    const checkboxWrapper = document.createElement("div");
-                    checkboxWrapper.className = "checkbox-wrapper-36";
-                    const checkbox = document.createElement("input");
-                    checkbox.type = "checkbox";
-                    checkbox.id = `toggle-${task.id}`;
-                    checkbox.checked = task.completed;
-                    const checkboxLabel = document.createElement("label");
-                    checkboxLabel.htmlFor = `toggle-${task.id}`;
-
-                    checkboxWrapper.appendChild(checkbox);
-                    checkboxWrapper.appendChild(checkboxLabel);
-                    listItem.appendChild(checkboxWrapper);
-                    const editButton = document.createElement("sl-button");
-                    editButton.textContent = "Edit";
-                    editButton.setAttribute("variant", "primary");
-                    editButton.className = "edit-button";
-                    
-                    editButton.addEventListener("click", () => {
-                        openEditModal
-                    });
-                    listItem.appendChild(editButton);
-                    const deleteButton = document.createElement("sl-button");
-                    deleteButton.textContent = "Delete";
-                    deleteButton.setAttribute("variant", "danger");
-                    deleteButton.className = "delete-button";
-                    deleteButton.addEventListener("click", () => {
-                        deleteTask(task.id)
-                            .then(() => {
-                                console.log(`Task ${task.id} deleted successfully.`);
-                                saveTasks(); // Save tasks to localStorage whenever updated
-                                displayAllTasks(filter); // Refresh the task list with the current filter
-                            })
-                            .catch((error) => console.error("Error deleting task:", error));
-                    });
-                    listItem.appendChild(deleteButton);
-                    // Task name
-                    const taskName = document.createElement("h3");
-                    taskName.textContent = task.name;
-                    listItem.appendChild(taskName);
-
-                    // Task description
-                    const taskDescription = document.createElement("p");
-                    taskDescription.textContent = task.description;
-                    listItem.appendChild(taskDescription);
-
-                    // Task creation date
-                    const taskDate = document.createElement("p");
-                    taskDate.textContent = "Created At: " + new Date(task.createdAt).toLocaleString();
-                    listItem.appendChild(taskDate);
-
-                    // Task status
-                    const taskStatus = document.createElement("p");
-                    if (checkbox.checked) {
-                        listItem.style.boxShadow = "0 2px 4px rgba(10, 228, 10, 0.88)";
-                    } else {
-                        listItem.style.boxShadow = "0 2px 4px rgba(255, 0, 0, 0.94)";
-                    }
-                    taskStatus.textContent = task.completed ? "Completed" : "Not Completed";
-                    listItem.appendChild(taskStatus);
-
-                    // Task completedAt
-                    const taskCompletedAt = document.createElement("p");
-                    taskCompletedAt.textContent = task.completedAt
-                        ? "Completed at: " + new Date(task.completedAt).toLocaleString()
-                        : "Completed at: Not Completed Yet";
-                    listItem.appendChild(taskCompletedAt);
-
-                    // Add event listener to handle task completion
-                    checkbox.addEventListener("change", () => {
-                        const updatedTask = {
-                            ...task,
-                            completed: checkbox.checked,
-                            completedAt: checkbox.checked ? new Date().toISOString() : null,
-                        };
-
-                        updateTask(task.id, updatedTask)
-                            .then(() => {
-                                console.log(`Task ${task.id} updated successfully.`);
-                                saveTasks(); // Save tasks to localStorage whenever updated
-                                displayAllTasks(filter); // Refresh the task list with the current filter
-                            })
-                            .catch((error) => console.error("Error updating task:", error));
-                    });
-
-                    taskList.appendChild(listItem);
-                });
-
-                saveTasks(tasks);
-            })
-            .catch((error) => {
-                console.error("Error loading tasks from server, trying to load from localStorage:", error);
-                const tasksFromLocalStorage = loadTasks();
-                displayAllLocalTasks(tasksFromLocalStorage);
+            // Apply the filter
+            const filteredTasks = tasks.filter((task) => {
+                if (filter === "completed") return task.completed;
+                if (filter === "active") return !task.completed;
+                return true;
             });
+
+            const taskList = document.getElementById("task-list");
+            taskList.innerHTML = ""; // Clear existing cards
+
+            filteredTasks.forEach((task) => {
+                const cardCol = document.createElement("div");
+                cardCol.className = "col-md-4"; // 3 cards per row on md+, full width on smaller
+                
+                const card = document.createElement("div");
+                card.className = "card h-100 shadow-sm";
+                
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body d-flex flex-column";
+                
+                // Create a styled checkbox for task completion
+                const checkboxWrapper = document.createElement("div");
+                checkboxWrapper.className = "checkbox-wrapper-36";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = `toggle-${task.id}`; // Corrected template literal syntax
+                checkbox.checked = task.completed;
+
+                const checkboxLabel = document.createElement("label");
+                checkboxLabel.htmlFor = `toggle-${task.id}`; // Corrected template literal syntax
+
+                checkboxWrapper.appendChild(checkbox);
+                checkboxWrapper.appendChild(checkboxLabel); // Removed duplicate append
+                
+                const title = document.createElement("p");
+                title.className = "card-title h5";
+                title.textContent = task.name;
+
+                const description = document.createElement("p");
+                description.className = "card-text";
+                description.textContent = task.description;
+
+                const createdAt = document.createElement("p");
+                createdAt.className = "text-muted small mb-1";
+                createdAt.textContent = "Created: " + new Date(task.createdAt).toLocaleString();
+
+                const statusBadge = document.createElement("span");
+                statusBadge.className = task.completed ? "badge bg-success" : "badge bg-danger";
+                statusBadge.textContent = task.completed ? "Completed" : "Not Completed";
+
+                const completedAt = document.createElement("p");
+                completedAt.className = "text-muted small";
+                completedAt.textContent = task.completedAt
+                    ? "Completed at: " + new Date(task.completedAt).toLocaleString()
+                    : "Not completed yet";
+
+
+                // Buttons
+                const buttonGroup = document.createElement("div");
+                buttonGroup.className = "mt-auto d-flex justify-content-between";
+
+                const editBtn = document.createElement("button");
+                editBtn.className = "btn btn-sm btn-primary";
+                editBtn.textContent = "Edit";
+                editBtn.addEventListener("click", () => openEditModal(task));
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "btn btn-sm btn-danger";
+                deleteBtn.textContent = "Delete";
+                deleteBtn.addEventListener("click", () => {
+                    deleteTask(task.id)
+                        .then(() => {
+                            console.log(`Task ${task.id} deleted successfully.`);
+                            saveTasks();
+                            displayAllTasks(filter);
+                        })
+                        .catch((error) => console.error("Error deleting task:", error));
+                });
+
+                // Checkbox change logic
+                checkbox.addEventListener("change", () => {
+                    const updatedTask = {
+                        ...task,
+                        completed: checkbox.checked,
+                        completedAt: checkbox.checked ? new Date().toISOString() : null,
+                    };
+                    updateTask(task.id, updatedTask)
+                        .then(() => {
+                            console.log(`Task ${task.id} updated.`);
+                            saveTasks();
+                            displayAllTasks(filter);
+                        })
+                        .catch((error) => console.error("Error updating task:", error));
+                });
+
+                // Assemble card
+                cardBody.appendChild(checkboxWrapper);
+                cardBody.appendChild(title);
+                cardBody.appendChild(description);
+                cardBody.appendChild(createdAt);
+                cardBody.appendChild(statusBadge);
+                cardBody.appendChild(completedAt);
+                buttonGroup.appendChild(editBtn);
+                buttonGroup.appendChild(deleteBtn);
+                cardBody.appendChild(buttonGroup);
+                card.appendChild(cardBody);
+                cardCol.appendChild(card);
+                taskList.appendChild(cardCol);
+            });
+
+            saveTasks(tasks); // Save after initial load/filter
+        }).catch((error) => {
+            console.error("Error loading tasks from API. Loading from localStorage...", error);
+            const localTasks = loadTasks();
+            displayAllLocalTasks(localTasks, filter);
+        }
+        );
     } catch (error) {
-        console.error("Error in displayTasks:", error);
+        console.error("Error loading tasks:", error);
     }
 }
 
@@ -223,16 +237,32 @@ function loadTasks() {
         return [];
     }
 }
+export function displayAllLocalTasks(tasks, filter = "all") {
+        try {
+        // Filtra localmente igual à API
+        const filteredTasks = tasks.filter((task) => {
+            if (filter === "completed") return task.completed;
+            if (filter === "active") return !task.completed;
+            return true;
+        });
 
-function displayAllLocalTasks(tasks) {
-    tasks.forEach((task) => {
         const taskList = document.getElementById("task-list");
-        taskList.innerHTML = ""; // Clear the existing tasks
+        taskList.innerHTML = ""; // Limpa os cards existentes
 
-        tasks.forEach((task) => {
-            const listItem = document.createElement("div");
-            listItem.className = "task-item";
-            // Create a styled checkbox for task completion
+        filteredTasks.forEach((task) => {
+            const cardCol = document.createElement("div");
+            cardCol.className = "col-md-4";
+
+            const card = document.createElement("div");
+            card.className = "card h-100 shadow-sm";
+            card.style.boxShadow = task.completed
+                ? "0 2px 8px rgba(10, 228, 10, 0.88)"
+                : "0 2px 8px rgba(255, 0, 0, 0.85)";
+
+            const cardBody = document.createElement("div");
+            cardBody.className = "card-body d-flex flex-column";
+
+            // Checkbox
             const checkboxWrapper = document.createElement("div");
             checkboxWrapper.className = "checkbox-wrapper-36";
 
@@ -244,46 +274,49 @@ function displayAllLocalTasks(tasks) {
             const checkboxLabel = document.createElement("label");
             checkboxLabel.htmlFor = `toggle-${task.id}`;
 
-            // Append the checkbox and label to the wrapper
             checkboxWrapper.appendChild(checkbox);
             checkboxWrapper.appendChild(checkboxLabel);
 
-            // Append the checkbox wrapper to the task item
-            listItem.appendChild(checkboxWrapper);
+            const title = document.createElement("p");
+            title.className = "card-title h5";
+            title.textContent = task.name;
 
-            // Task name
-            const taskName = document.createElement("h3");
-            taskName.textContent = task.name;
-            listItem.appendChild(taskName);
+            const description = document.createElement("p");
+            description.className = "card-text";
+            description.textContent = task.description;
 
-            // Task description
-            const taskDescription = document.createElement("p");
-            taskDescription.textContent = task.description;
-            listItem.appendChild(taskDescription);
+            const createdAt = document.createElement("p");
+            createdAt.className = "text-muted small mb-1";
+            createdAt.textContent = "Created: " + new Date(task.createdAt).toLocaleString();
 
-            // Task creation date
-            const taskDate = document.createElement("p");
-            taskDate.textContent = "Created At: " + new Date(task.createdAt).toLocaleString();
-            listItem.appendChild(taskDate);
+            const statusBadge = document.createElement("span");
+            statusBadge.className = task.completed ? "badge bg-success" : "badge bg-danger";
+            statusBadge.textContent = task.completed ? "Completed" : "Not Completed";
 
-            // Task status
-            const taskStatus = document.createElement("p");
-            if (checkbox.checked) {
-                listItem.style.boxShadow = "0 2px 4px rgba(10, 228, 10, 0.88)";
-            } else {
-                listItem.style.boxShadow = "0 2px 4px rgba(255, 0, 0, 0.94)";
-            }
-            taskStatus.textContent = task.completed ? "Completed" : "Not Completed";
-            listItem.appendChild(taskStatus);
+            const completedAt = document.createElement("p");
+            completedAt.className = "text-muted small";
+            completedAt.textContent = task.completedAt
+                ? "Completed at: " + new Date(task.completedAt).toLocaleString()
+                : "Not completed yet";
 
-            // Task completedAt
-            const taskCompletedAt = document.createElement("p");
-            taskCompletedAt.textContent = task.completedAt
-                ? new Date(task.completedAt).toLocaleString()
-                : "Not Completed Yet";
-            listItem.appendChild(taskCompletedAt);
+            const buttonGroup = document.createElement("div");
+            buttonGroup.className = "mt-auto d-flex justify-content-between";
 
-            // Add event listener to handle task completion
+            const editBtn = document.createElement("button");
+            editBtn.className = "btn btn-sm btn-primary";
+            editBtn.textContent = "Edit";
+            editBtn.addEventListener("click", () => openEditModal(task));
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "btn btn-sm btn-danger";
+            deleteBtn.textContent = "Delete";
+            deleteBtn.addEventListener("click", () => {
+                // Remove a task localmente
+                const updatedTasks = tasks.filter(t => t.id !== task.id);
+                saveTasks(updatedTasks);
+                displayAllLocalTasks(updatedTasks, filter);
+            });
+
             checkbox.addEventListener("change", () => {
                 const updatedTask = {
                     ...task,
@@ -291,19 +324,30 @@ function displayAllLocalTasks(tasks) {
                     completedAt: checkbox.checked ? new Date().toISOString() : null,
                 };
 
-                updateTask(task.id, updatedTask)
-                    .then(() => {
-                        console.log(`Task ${task.id} updated successfully.`);
-                        saveTasks(); // Save tasks to localStorage whenever updated
-                        displayAllTasks(); // Refresh the task list
-                    })
-                    .catch((error) => console.error("Error updating task:", error));
+                // Atualiza a task na lista local
+                const updatedTasks = tasks.map((t) =>
+                    t.id === task.id ? updatedTask : t
+                );
+                saveTasks(updatedTasks);
+                displayAllLocalTasks(updatedTasks, filter);
             });
 
-            taskList.appendChild(listItem);
+            // Montagem do card
+            cardBody.appendChild(checkboxWrapper);
+            cardBody.appendChild(title);
+            cardBody.appendChild(description);
+            cardBody.appendChild(createdAt);
+            cardBody.appendChild(statusBadge);
+            cardBody.appendChild(completedAt);
+            buttonGroup.appendChild(editBtn);
+            buttonGroup.appendChild(deleteBtn);
+            cardBody.appendChild(buttonGroup);
+            card.appendChild(cardBody);
+            cardCol.appendChild(card);
+            taskList.appendChild(cardCol);
         });
-        // Salvar as tasks no localStorage sempre que elas forem carregadas com sucesso
-        saveTasks(tasks);
-
-    });
+    } catch (error) {
+        console.error("Error displaying local tasks:", error);
+    }
 }
+
