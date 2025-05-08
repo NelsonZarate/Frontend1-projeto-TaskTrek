@@ -80,7 +80,7 @@ todoForm.addEventListener("submit", (event) => {
         errorMessage.textContent = ""; // Clear any previous error messages
         errorMessage.style.color = "green";
         errorMessage.textContent = "Task added successfully!";
-        
+
     } else {
         errorMessage.textContent = "Please fill in at least the title of the task.";
         errorMessage.style.color = "red";
@@ -107,13 +107,13 @@ export function displayAllTasks(filter = "all") {
             filteredTasks.forEach((task) => {
                 const cardCol = document.createElement("div");
                 cardCol.className = "col-md-4"; // 3 cards per row on md+, full width on smaller
-                
+
                 const card = document.createElement("div");
                 card.className = "card h-100 shadow-sm";
-                
+
                 const cardBody = document.createElement("div");
                 cardBody.className = "card-body d-flex flex-column";
-                
+
                 // Create a styled checkbox for task completion
                 const checkboxWrapper = document.createElement("div");
                 checkboxWrapper.className = "checkbox-wrapper-36";
@@ -128,7 +128,7 @@ export function displayAllTasks(filter = "all") {
 
                 checkboxWrapper.appendChild(checkbox);
                 checkboxWrapper.appendChild(checkboxLabel); // Removed duplicate append
-                
+
                 const title = document.createElement("p");
                 title.className = "card-title h5";
                 title.textContent = task.name;
@@ -157,23 +157,36 @@ export function displayAllTasks(filter = "all") {
                 buttonGroup.className = "mt-auto d-flex justify-content-between";
 
                 const editBtn = document.createElement("button");
-                editBtn.className = "btn btn-sm btn-primary";
-                editBtn.textContent = "Edit";
+                editBtn.className = "btn btn-sm btn-primary bi bi-pencil-fill";
+                editBtn.textContent = " Edit";
                 editBtn.addEventListener("click", () => openEditModal(task));
 
                 const deleteBtn = document.createElement("button");
-                deleteBtn.className = "btn btn-sm btn-danger";
-                deleteBtn.textContent = "Delete";
-                deleteBtn.addEventListener("click", () => {
-                    deleteTask(task.id)
-                        .then(() => {
-                            console.log(`Task ${task.id} deleted successfully.`);
-                            saveTasks();
-                            displayAllTasks(filter);
-                        })
-                        .catch((error) => console.error("Error deleting task:", error));
-                });
+                deleteBtn.className = "btn btn-sm btn-danger bi bi-trash-fill";
+                deleteBtn.textContent = " Delete";
+                deleteBtn.addEventListener("click", async(e) => {
+                    e.stopPropagation();
 
+                    const result = await Swal.fire({
+                        title: "Do you want to delete this post?",
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Delete",
+                        denyButtonText: `Don't Delete`,
+                        icon: 'warning'
+                    });
+
+                    if (result.isConfirmed) {
+                        await deleteTask(task.id);
+                        Swal.fire("Deleted!", "", "success");
+                        console.log(`Task ${task.id} deleted successfully.`);
+                        saveTasks();
+                        displayAllTasks(filter);
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                        console.error("Error deleting task:", error);
+                    }
+                });
                 // Checkbox change logic
                 checkbox.addEventListener("change", () => {
                     const updatedTask = {
@@ -238,7 +251,7 @@ function loadTasks() {
     }
 }
 export function displayAllLocalTasks(tasks, filter = "all") {
-        try {
+    try {
         // Filtra localmente igual à API
         const filteredTasks = tasks.filter((task) => {
             if (filter === "completed") return task.completed;

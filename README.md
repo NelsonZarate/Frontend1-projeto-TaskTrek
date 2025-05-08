@@ -21,13 +21,13 @@
 5. Use at least one external library (An ui component library for example).(index.html)
 6. Responsive
 7. Generate lighthouse report with all 4 metrics on the green. (lighthouseReport)
-8. Online on github pages.
+8. Online on github pages. https://nelsonzarate.github.io/Frontend1-projeto-TaskTrek/
 
 ## Bonus
 
-- Implement 1 web component.
+- Implement 1 web component. (src.js)
 - Also use local storage.(task.js)
 - Configure PWA.
 - Use canvas in some way.
 
-- Apresentar projeto no portfolio desenvolvido em Web Pages
+- Apresentar projeto no portfolio desenvolvido em Web Pages 

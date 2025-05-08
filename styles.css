@@ -235,3 +235,16 @@ main {
   box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
   outline: none;
 }
+
+.addTaskButon{
+  color: white;
+  background-color: rgb(7, 79, 79);
+  width: 100%;
+  border: 4px;
+  border-color: rgb(6, 40, 52);
+  border-radius: 5px;
+  height: 40px;
+}
+.addTaskButon:hover{
+  background-color: rgb(17, 116, 116);
+}
