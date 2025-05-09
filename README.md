@@ -27,7 +27,7 @@
 
 - Implement 1 web component. (src.js)
 - Also use local storage.(task.js)
-- Configure PWA.
+- Configure PWA. maniffest.json
 - Use canvas in some way.
 
-- Apresentar projeto no portfolio desenvolvido em Web Pages 
+- Apresentar projeto no portfolio desenvolvido em Web Pages https://nelsonzarate.github.io/NelsonZarate_portfolio/
